@@ -4,11 +4,15 @@
   "description": "A generator for quickly creating static sites",
   "main": "index.js",
   "dependencies": {
+    "del": "^2.2.2",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^3.0.2",
+    "gulp-clean-css": "^3.0.3",
+    "gulp-htmlmin": "^3.0.0",
     "gulp-less": "^3.3.0",
     "gulp-mustache": "^2.3.0",
-    "gulp-uglify": "^2.0.1"
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.1",
+    "gulp-watch": "^4.3.11"
   },
   "devDependencies": {},
   "scripts": {

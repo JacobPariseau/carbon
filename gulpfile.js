@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-
+const watch = require('gulp-watch');
 const less = require('gulp-less');
 const cleanCSS = require('gulp-clean-css')
 
@@ -14,8 +14,16 @@ const del = require('del');
 const source = './source/';
 const bin = './site/';
 
+const patterns = {
+  less: source + 'styles/**/*.less',
+  css: source + "styles/**/*.css",
+  js: source + "scripts/**/*.js",
+  mustache: source + 'templates/*.mustache',
+  mustachePartials: source + 'templates/**/*.mustache',
+  image: source + "img/*.png"
+};
 gulp.task('less', function () {
-  return gulp.src(source + 'styles/**/*.less')
+  return gulp.src(patterns.less)
   .pipe(less({
     paths: [ path.join(__dirname, 'less', 'includes')]
   }))
@@ -24,23 +32,28 @@ gulp.task('less', function () {
 });
 
 gulp.task('css', function () {
-  return gulp.src(source + "styles/**/*.css")
+  return gulp.src(patterns.css)
   .pipe(cleanCSS())
   .pipe(gulp.dest(bin + 'css'));
 });
 
 gulp.task('scripts', function () {
-  return gulp.src(source + "scripts/**/*.js")
+  return gulp.src(patterns.js)
   .pipe(uglify())
   .pipe(gulp.dest(bin + 'js'));
 });
 
 gulp.task('template', function () {
-  return gulp.src(source + 'templates/*.mustache')
+  return gulp.src(patterns.mustache)
   .pipe(mustache({}))
   .pipe(rename({extname: ".html"}))
   .pipe(htmlmin({collapseWhitespace: true }))
   .pipe(gulp.dest(bin));
+});
+
+gulp.task('images', function () {
+  return gulp.src(patterns.image)
+  .pipe(gulp.dest(bin + 'img'));
 });
 
 gulp.task('clean', function () {
@@ -48,5 +61,14 @@ gulp.task('clean', function () {
 });
 
 gulp.task('build', ['clean'], function () {
-  return gulp.start('css', 'less', 'scripts', 'template');
+  return gulp.start('css', 'less', 'scripts', 'template', 'images');
+});
+
+gulp.task('watch', function () {
+  watch(patterns.mustachePartials, function () {
+    gulp.start('template');
+  });
+  watch(patterns.image, function () {
+    gulp.start('images');
+  });
 });
