@@ -42,7 +42,7 @@
 
   gulp.task('scripts', function () {
     return gulp.src(patterns.js)
-    .pipe(uglify())
+    //.pipe(uglify())
     .pipe(gulp.dest(bin + 'js'));
   });
 
